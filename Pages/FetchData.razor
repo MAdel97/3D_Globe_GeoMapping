@@ -8,6 +8,7 @@
 
 <h1>Dynamikc Geo Addresses from all over the world</h1>
 
+<Button Color="ButtonColor.Primary" @onclick="OnShowModalClick">Adding new Address</Button>
 
 <Grid TItem="Address" class="table table-hover table-bordered table-striped" DataProvider="AddressesDataProvider" AllowFiltering="true" Responsive="true">
     <GridColumn TItem="Address" HeaderText="Id" PropertyName="Id">
@@ -26,7 +27,6 @@
         @context.PostalCode
     </GridColumn>
     <GridColumn TItem="Address" HeaderText="" PropertyName="IsActive">
-        <Button Color="ButtonColor.Primary" @onclick="OnShowModalClick">Show Employee Component</Button>
     </GridColumn>
    
 </Grid>
@@ -53,7 +53,7 @@
     private async Task OnShowModalClick()
     {
         var parameters = new Dictionary<string, object>();
-        parameters.Add("AddressId", 321);
+        parameters.Add("Id", 321);
         await modal.ShowAsync<AddressModal>(title: "Address Details", parameters: parameters);
     }
 }
