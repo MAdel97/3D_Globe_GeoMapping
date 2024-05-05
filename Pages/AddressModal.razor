@@ -1,0 +1,72 @@
+﻿@using GeoMapping.BLL
+@using GeoMapping.Models
+@namespace GeoMapping.Modals
+
+
+@if (LastSubmitResult != null)
+{
+  <h2>
+    Last submit status: @LastSubmitResult
+  </h2>
+}
+
+
+<form class="prose flex flex--column" Model="@address" @onsubmit="Submit">
+
+    <h3>Address Details</h3>
+    <input @bind-value=address.SiteName class="input mb12" name="address" autocomplete="" address-line1" placeholder="Address">    
+    <input @bind-value=address.Apartment class="input mb12" name="apartment" autocomplete="shipping address-line2" placeholder="Apartment">
+    <div class="flex">
+        <input @bind-value=address.City class="input mb12" name="city" autocomplete="address-level2" placeholder="City">
+        <input @bind-value=address.State class ="input mb12 ml6" name="state" autocomplete=" address-level1" placeholder="State">
+        <input @bind-value=address.PostalCode class="input mb12 ml6" autocomplete=" postal-code" placeholder="ZIP / Postcode">
+    </div>
+
+  
+   
+    <div class="row">
+    <div class="col-8">edew </div>
+    <button type="submit" class="btn btn-primary col-4">submit</button>
+
+    </div>
+</form>
+
+@code {
+    private Address address = new Address();
+
+    [Parameter] public int EmployeeId { get; set; }
+
+    string LastSubmitResult;
+
+    protected override void OnInitialized()
+    {
+        // get employee with {EmployeeId} from DB
+
+        // employee = new Employee1 { FirstName = "Vikram", LastName = "Reddy" };
+
+        base.OnInitialized();
+    }
+    void Submit()
+    {
+        var success = address;
+
+    }
+    void ValidFormSubmitted(EditContext editContext)
+    {
+        LastSubmitResult = "OnValidSubmit was executed";
+    }
+
+    void InvalidFormSubmitted(EditContext editContext)
+    {
+        LastSubmitResult = "OnInvalidSubmit was executed";
+    }
+
+    void FormSubmitted(EditContext editContext)
+    {
+        bool formIsValid = editContext.Validate();
+        LastSubmitResult =
+          formIsValid
+          ? "Success - form was valid"
+          : "Failure - form was invalid";
+    }
+}

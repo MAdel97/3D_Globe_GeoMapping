@@ -1,0 +1,59 @@
+﻿@page "/fetchdata"
+@*@using GeoMapping.BLL
+*@@using global::GeoMapping.Models
+@using global::GeoMapping.Modals
+@*@inject WeatherForecastService ForecastService
+*@
+<PageTitle>Geo Addresses </PageTitle>
+
+<h1>Dynamikc Geo Addresses from all over the world</h1>
+
+
+<Grid TItem="Address" class="table table-hover table-bordered table-striped" DataProvider="AddressesDataProvider" AllowFiltering="true" Responsive="true">
+    <GridColumn TItem="Address" HeaderText="Id" PropertyName="Id">
+        @context.Id
+    </GridColumn>
+    <GridColumn TItem="Address" HeaderText="Site Name" PropertyName="Name">
+        @context.SiteName
+    </GridColumn>
+    <GridColumn TItem="Address" HeaderText="Apartment" PropertyName="Apartment">
+        @context.Apartment
+    </GridColumn>
+    <GridColumn TItem="Address" HeaderText="City" PropertyName="City">
+        @context.City
+    </GridColumn>
+    <GridColumn TItem="Address" HeaderText="Postal Code" PropertyName="PostalCode">
+        @context.PostalCode
+    </GridColumn>
+    <GridColumn TItem="Address" HeaderText="" PropertyName="IsActive">
+        <Button Color="ButtonColor.Primary" @onclick="OnShowModalClick">Show Employee Component</Button>
+    </GridColumn>
+   
+</Grid>
+<Modal @ref="modal" />
+@code {
+    private IEnumerable<Address> addresses;
+
+    protected override void OnInitialized()
+    {
+        addresses = new List<Address>
+        {
+          
+        };
+    }
+
+    private async Task<GridDataProviderResult<Address>> AddressesDataProvider(GridDataProviderRequest<Address> request)
+    {
+        return await Task.FromResult(request.ApplyTo(addresses));
+    }
+
+    private Modal modal = default!;
+    private string? message;
+
+    private async Task OnShowModalClick()
+    {
+        var parameters = new Dictionary<string, object>();
+        parameters.Add("AddressId", 321);
+        await modal.ShowAsync<AddressModal>(title: "Address Details", parameters: parameters);
+    }
+}
