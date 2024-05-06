@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,10 +22,17 @@ namespace GeoMapping.Helper
 
 
 
-        public static List<GeoCode> AddComponent()
+        public static List<double> AddComponent(AddressDTO addressDTO)
         {
+            string siteName = addressDTO.SiteName;
+            string city = "%20" + addressDTO.City;
+            string country = "%20" + addressDTO.Country + ".json?";
+            string encodedUrl = Uri.EscapeDataString(siteName)+city+country;
+
+
+            
             string URL = "https://api.mapbox.com/geocoding/" +
-                "v5/mapbox.places/Bogor%20Tengah%2C%20Bogor%2C%20West%20Java%2C%20Indonesia.json?proximity=ip&access_token=pk.eyJ1IjoibWFkZWwtOTc5NyIsImEiOiJjbHZxZnJpdW4wZXEwMmxtaHFvdXJsNGNiIn0.4rf_FlySdUEG3NMti8NuUQ";
+                "v5/mapbox.places/"+encodedUrl+ "proximity=ip&access_token=pk.eyJ1IjoibWFkZWwtOTc5NyIsImEiOiJjbHZxZnJpdW4wZXEwMmxtaHFvdXJsNGNiIn0.4rf_FlySdUEG3NMti8NuUQ";
             HttpClient client = new HttpClient();
             client.DefaultRequestHeaders.Accept.Clear();
 
@@ -39,7 +47,9 @@ namespace GeoMapping.Helper
                 string result = messge.Content.ReadAsStringAsync().Result;
 
                 var jsonp = JsonConvert.DeserializeObject<Response>(result).features;
-                return jsonp.ToList();
+                var items= jsonp.ToList();
+                var coordinates = items[0].geometry.coordinates;
+                return coordinates;
             }
 
             return null;

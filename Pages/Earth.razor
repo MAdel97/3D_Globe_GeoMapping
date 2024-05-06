@@ -1,4 +1,10 @@
 ﻿@page "/earth"
+@page "/earth/{coordinates}"
+@using GeoMapping.Services
+@inject IAddressService addressService
+@inject Geometry geometry
+
+
 
 <PageTitle>3D Globe</PageTitle>
 <h1>Dynamic 3D Globe for exact address</h1>
@@ -18,10 +24,13 @@
 <div id="map"></div>
 
 @code {
-   
+    [Parameter]
+    public string coordinates { get; set; }
+
     [Inject] IJSRuntime JSRuntime { get; set; }
     protected override void OnAfterRender(bool firstRender)
     {
-        JSRuntime.InvokeVoidAsync("exampleJsFunctions.LoadGlobe");
+        var decimals = geometry.Getcoordinates();
+        JSRuntime.InvokeVoidAsync("exampleJsFunctions.LoadGlobe",decimals);
     }
 }

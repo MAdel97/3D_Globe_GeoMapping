@@ -7,6 +7,7 @@ using GeoMapping.BLL;
 using Microsoft.AspNetCore.ResponseCompression;
 using SignalRDemo.Hub;
 using GeoMapping.Services;
+using GeoMapping.DTO;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,10 @@ builder.Services.AddDbContext<GeoMappingContext>(options =>
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<GeoMappingBLL>();
+builder.Services.AddSingleton<IAddressService,AddressService>();
+builder.Services.AddScoped<Geometry>();
+
+
 builder.Services.AddBlazorBootstrap();
 builder.Services.AddHttpClient<IAddressService, AddressService>(client =>
 {

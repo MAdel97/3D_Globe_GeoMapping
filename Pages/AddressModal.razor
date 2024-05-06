@@ -14,9 +14,9 @@
 <form class="prose flex flex--column" Model="@address" @onsubmit="Submit">
 
     <h3>Address Details</h3>
-    <input @bind-value=@Id class="input mb12" name="Id" autocomplete="address-line1" placeholder="Id">
+    <input @bind-value=@address.Id class="input mb12" name="Id" autocomplete="address-line1" placeholder="Id">
 
-    <input @bind-value=address.SiteName class="input mb12" name="address" autocomplete="shipping address-line1" placeholder="Address">
+    <input @bind-value=address.SiteName class="input mb12" name="Site Name" autocomplete="shipping address-line1" placeholder="Site Name">
     <input @bind-value=address.Apartment class="input mb12" name="apartment" autocomplete="shipping address-line2" placeholder="Apartment">
     <div class="flex">
         <input @bind-value=address.City class="input mb12" name="city" autocomplete="address-level2" placeholder="City">

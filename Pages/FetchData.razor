@@ -2,10 +2,12 @@
 @*@using GeoMapping.BLL
 *@@using global::GeoMapping.Models
 @using global::GeoMapping.Modals
-@inject NavigationManager Navigation
-@inject GeoMappingBLL GeoAddressService
-@using GeoMapping.Services
 @using GeoMapping.Helper
+@using GeoMapping.Services
+@inject NavigationManager Navigation
+@inject Geometry geomtery
+@inject IAddressService addressService
+
 
 <PageTitle>Geo Addresses </PageTitle>
 
@@ -44,8 +46,6 @@
 
 @code {
 
-    [Inject]
-    public IAddressService addressService { get; set; }
 
     private IList<AddressDTO> addresses=new List<AddressDTO>();
 
@@ -65,30 +65,34 @@
     }
 
     private Modal modal = default!;
+
     private string? message;
 
     private async Task OnShowModalClick()
     {
-        var parameters = new Dictionary<string, object>();
-        parameters.Add("Id", 321);
-        await modal.ShowAsync<AddressModal>(title: "Address Details", parameters: parameters);
+        //var parameters = new Dictionary<string, object>();
+        //parameters.Add("Id", 321);
+        await modal.ShowAsync<AddressModal>(title: "Address Details");
     }
 
- 
+
     protected async Task Add(AddressDTO addressDTO)
-        {
-        
-        NavigateToCounterComponent();
-       var data = GeoCodingService.AddComponent(); // the geocoding service reverses the text address into coordinates
-                                                   // to be displayed on the 3d globe model using mapbox geocoding API
+    {
 
-       addressDTO.PostalCode=4354545;
+        var data = GeoCodingService.AddComponent(addressDTO); // the geocoding service reverses the text address into coordinates
+                                                              // to be displayed on the 3d globe model using mapbox geocoding API
+        geomtery.Setcoordinates(data);
+        NavigateToCounterComponent(data);
+
+        addressDTO.PostalCode=4354545;
     }
 
 
-    private void NavigateToCounterComponent()
+    private void NavigateToCounterComponent(List<double> decimals)
     {
-        Navigation.NavigateTo("/earth");
+        var coordinates = decimals;
+
+        Navigation.NavigateTo("/earth"+"/"+coordinates.ToString());
     }
 
 
