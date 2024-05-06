@@ -2,47 +2,64 @@
 @*@using GeoMapping.BLL
 *@@using global::GeoMapping.Models
 @using global::GeoMapping.Modals
-@*@inject WeatherForecastService ForecastService
-*@
+@inject NavigationManager Navigation
+@inject GeoMappingBLL GeoAddressService
+@using GeoMapping.Services
+@using GeoMapping.Helper
+
 <PageTitle>Geo Addresses </PageTitle>
 
-<h1>Dynamikc Geo Addresses from all over the world</h1>
+<h1>Dynamic Geo Addresses from all over the world</h1>
 
-<Button Color="ButtonColor.Primary" @onclick="OnShowModalClick">Adding new Address</Button>
 
-<Grid TItem="Address" class="table table-hover table-bordered table-striped" DataProvider="AddressesDataProvider" AllowFiltering="true" Responsive="true">
-    <GridColumn TItem="Address" HeaderText="Id" PropertyName="Id">
+<Button Class="mb-3 mt-3"  Color="ButtonColor.Primary" @onclick="OnShowModalClick">Adding new Address</Button>
+
+<Grid TItem="AddressDTO"  class="table table-hover table-bordered table-striped" DataProvider="AddressesDataProvider" AllowFiltering="true" Responsive="true">
+    <GridColumn TItem="AddressDTO" HeaderText="Id" PropertyName="Id">
         @context.Id
     </GridColumn>
-    <GridColumn TItem="Address" HeaderText="Site Name" PropertyName="Name">
+    <GridColumn TItem="AddressDTO" HeaderText="Site Name" PropertyName="Name">
         @context.SiteName
     </GridColumn>
-    <GridColumn TItem="Address" HeaderText="Apartment" PropertyName="Apartment">
+    <GridColumn TItem="AddressDTO" HeaderText="Apartment" PropertyName="Apartment">
         @context.Apartment
     </GridColumn>
-    <GridColumn TItem="Address" HeaderText="City" PropertyName="City">
+    <GridColumn TItem="AddressDTO" HeaderText="City" PropertyName="City">
         @context.City
     </GridColumn>
-    <GridColumn TItem="Address" HeaderText="Postal Code" PropertyName="PostalCode">
+    <GridColumn TItem="AddressDTO" HeaderText="Postal Code" PropertyName="PostalCode">
         @context.PostalCode
+        
     </GridColumn>
-    <GridColumn TItem="Address" HeaderText="" PropertyName="IsActive">
+    <GridColumn TItem="AddressDTO" HeaderText="Country" PropertyName="Country">
     </GridColumn>
+    <GridColumn Filterable=false TItem="AddressDTO" HeaderText="Actions" PropertyName="Actions">
+        <Button Color="ButtonColor.Danger" @onclick="(() => Add(context))">Show on 3d map</Button>
+    </GridColumn>
+
+
    
 </Grid>
 <Modal @ref="modal" />
-@code {
-    private IEnumerable<Address> addresses;
 
-    protected override void OnInitialized()
+@code {
+
+    [Inject]
+    public IAddressService addressService { get; set; }
+
+    private IList<AddressDTO> addresses=new List<AddressDTO>();
+
+    protected override async Task OnInitializedAsync()
     {
-        addresses = new List<Address>
-        {
-          
-        };
+        //StateHasChanged();
+
+        var result = (await addressService.GetAddresses()).ToList();
+        addresses = result.ToArray();
     }
 
-    private async Task<GridDataProviderResult<Address>> AddressesDataProvider(GridDataProviderRequest<Address> request)
+
+
+    private async Task<GridDataProviderResult<AddressDTO>> AddressesDataProvider(GridDataProviderRequest<AddressDTO> request)
     {
         return await Task.FromResult(request.ApplyTo(addresses));
     }
@@ -56,4 +73,24 @@
         parameters.Add("Id", 321);
         await modal.ShowAsync<AddressModal>(title: "Address Details", parameters: parameters);
     }
+
+ 
+    protected async Task Add(AddressDTO addressDTO)
+        {
+        
+        NavigateToCounterComponent();
+       var data = GeoCodingService.AddComponent(); // the geocoding service reverses the text address into coordinates
+                                                   // to be displayed on the 3d globe model using mapbox geocoding API
+
+       addressDTO.PostalCode=4354545;
+    }
+
+
+    private void NavigateToCounterComponent()
+    {
+        Navigation.NavigateTo("/earth");
+    }
+
+
+
 }

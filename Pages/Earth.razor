@@ -1,0 +1,27 @@
+﻿@page "/earth"
+
+<PageTitle>3D Globe</PageTitle>
+<h1>Dynamic 3D Globe for exact address</h1>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    #map {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+    }
+</style>
+<div id="map"></div>
+
+@code {
+   
+    [Inject] IJSRuntime JSRuntime { get; set; }
+    protected override void OnAfterRender(bool firstRender)
+    {
+        JSRuntime.InvokeVoidAsync("exampleJsFunctions.LoadGlobe");
+    }
+}

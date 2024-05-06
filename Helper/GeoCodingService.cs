@@ -39,8 +39,6 @@ namespace GeoMapping.Helper
                 string result = messge.Content.ReadAsStringAsync().Result;
 
                 var jsonp = JsonConvert.DeserializeObject<Response>(result).features;
-               // var geometryjson= JsonConvert.DeserializeObject<List<GeoCode>>(jsonp);
-
                 return jsonp.ToList();
             }
 
