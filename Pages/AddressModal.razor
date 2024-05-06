@@ -1,7 +1,7 @@
-﻿@*@using GeoMapping.BLL*@
+﻿@using GeoMapping.BLL
 @using GeoMapping.Models
 @namespace GeoMapping.Modals
-
+@inject GeoMappingBLL GeoAddressService
 
 @if (LastSubmitResult != null)
 {
@@ -24,17 +24,15 @@
         <input @bind-value=address.PostalCode class="input mb12 ml6" autocomplete=" shipping postal-code" placeholder="ZIP / Postcode">
     </div>
 
-  
-   
     <div class="row">
-    <div class="col-8">edew </div>
+    <div class="col-8"> </div>
     <button type="submit" class="btn btn-primary col-4">submit</button>
 
     </div>
 </form>
 
 @code {
-    private Address address = new Address();
+    private AddressDTO address = new AddressDTO();
 
     [Parameter] public int Id { get; set; }
 
@@ -42,16 +40,14 @@
 
     protected override void OnInitialized()
     {
-        // get employee with {EmployeeId} from DB
 
-        // employee = new Employee1 { FirstName = "Vikram", LastName = "Reddy" };
 
         base.OnInitialized();
     }
     void Submit()
     {
         var success = address;
-
+        GeoAddressService.AddAddress(success);
     }
 
 }

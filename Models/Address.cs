@@ -5,9 +5,7 @@ namespace GeoMapping.Models
 {
     public  class Address
     {
-        public Address()
-        {
-        }
+       
         public int Id { get; set; }
         public string SiteName { get; set; }
         public int Apartment { get; set; }

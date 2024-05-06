@@ -5,7 +5,7 @@ using GeoMapping.Models;
 namespace GeoMapping.Context
 
 {
-    public partial class GeoMappingContext : DbContext
+    public partial class GeoMappingContext : DbContext  
     {
         public GeoMappingContext()
         {
@@ -26,7 +26,7 @@ namespace GeoMapping.Context
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=Hady-Sharawi\\SQLEXPRESS;Database=GeoMapping;Trusted_Connection=True;MultipleActiveResultSets=true");
+                optionsBuilder.UseSqlServer("Server=Hady-Sharawi\\SQLEXPRESS;Database=GeoMapping;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=true");
             }
         }
 

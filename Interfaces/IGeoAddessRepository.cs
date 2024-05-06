@@ -12,5 +12,6 @@ namespace GeoMapping.Interfaces
     public interface IGeoAddressRepository
     {
         Task<List<Address>> GetAddressesList();
+        Task<Address> AddAddress(Address _obj);    
     }
 }
